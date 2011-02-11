@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.example.android.BluetoothChat"
+        android:orientation="horizontal"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:id="@+id/pistol_container"
+        android:background="@android:color/white"
+        >
+    <ImageView android:id="@+id/pistol"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:src="@drawable/pistol760x366"
+            />
+    <!--com.example.android.BluetoothChat.VerticalLabelView android:layout_width="fill_parent" android:layout_alignParentBottom="true" android:layout_height="wrap_content" app:text="Point your pistol to the ground!"/-->
+</RelativeLayout>
