@@ -2,7 +2,6 @@ package com.example.android.BluetoothChat;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
@@ -20,11 +19,19 @@ public class WinLostGameOverlayView extends View {
     public WinLostGameOverlayView(Context context) {
         super(context);
         this.context = context;
-
-        invalidate();
     }
 
     private String winLossText = "You Lose";
+
+    private Integer textColor;
+
+    public Integer getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(Integer textColor) {
+        this.textColor = textColor;
+    }
 
     public String getWinLossText() {
         return winLossText;
@@ -38,9 +45,8 @@ public class WinLostGameOverlayView extends View {
     protected void onDraw(Canvas canvas) {
         Paint paint = new Paint();
 
-        paint.setColor(Color.argb(175, 230, 41, 41));
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(0, 0, getRight(), getBottom(), paint);
+//        paint.setStyle(Paint.Style.FILL);
+//        canvas.drawRect(0, 0, getRight(), getBottom(), paint);
 
         canvas.translate(getWidth(), getHeight());
         canvas.rotate(-180);
@@ -51,9 +57,7 @@ public class WinLostGameOverlayView extends View {
         paint.getTextBounds(winLossText, 0, winLossText.length(), rect);
         int diff = (getWidth() - rect.width())/2;
         int yDiff = (getHeight()/2 + rect.height()/2);;
-        paint.setColor(Color.parseColor("#663300"));
+        paint.setColor(textColor);
         canvas.drawText(winLossText,diff,yDiff,paint);
-
-
     }
 }

@@ -1,5 +1,7 @@
 package com.example.android.BluetoothChat;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -10,4 +12,14 @@ import java.io.Serializable;
  */
 public class ShotHit implements Serializable {
 
+    @JsonProperty("w")
+    private int whatever = (int)Math.random();
+
+    public int getWhatever() {
+        return whatever;
+    }
+
+    public void setWhatever(int whatever) {
+        this.whatever = whatever;
+    }
 }

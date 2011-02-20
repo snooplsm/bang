@@ -32,7 +32,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Android 2.1-update1 Platform" level="application" />
+    <orderEntry type="library" exported="" name="Android 2.1-update1 Platform" level="application" />
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
