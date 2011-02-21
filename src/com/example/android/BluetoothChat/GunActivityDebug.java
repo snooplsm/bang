@@ -20,8 +20,8 @@ public class GunActivityDebug extends Activity {
         RelativeLayout l = (RelativeLayout) findViewById(R.id.pistol_container);
 
         //HolsterWeaponOverlayView v = new HolsterWeaponOverlayView(this);
-        WinLostGameOverlayView v = new WinLostGameOverlayView(this);
-        v.setWinLossText("You Won!");
-        l.addView(v);
+//        WinLostGameOverlayView v = new WinLostGameOverlayView(this);
+//        v.setWinLossText("You Won!");
+//        l.addView(v);
     }
 }

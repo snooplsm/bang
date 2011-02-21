@@ -1,60 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+	<!--
+		Copyright (C) 2009 The Android Open Source Project Licensed under the Apache
+		License, Version 2.0 (the "License"); you may not use this file except in
+		compliance with the License. You may obtain a copy of the License at
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+		or agreed to in writing, software distributed under the License is distributed
+		on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+		express or implied. See the License for the specific language governing
+		permissions and limitations under the License.
+	-->
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.example.android.BluetoothChat"
+	android:versionCode="1"
+	android:versionName="1.0">
+	<uses-sdk
+		minSdkVersion="6"/>
+	<uses-feature
+		android:name="android.hardware.camera"/>
+	<uses-permission
+		android:name="android.permission.CAMERA"/>
+	<uses-permission
+		android:name="android.permission.FLASHLIGHT"/>
+	<uses-permission
+		android:name="android.permission.BLUETOOTH_ADMIN"/>
+	<uses-permission
+		android:name="android.permission.BLUETOOTH"/>
+	<uses-permission
+		android:name="android.permission.VIBRATE"/>
+	<uses-permission
+		android:name="android.permission.INTERNET"/>
 
-          http://www.apache.org/licenses/LICENSE-2.0
+	<application
+		android:label="@string/app_name"
+		android:icon="@drawable/app_icon"
+		android:debuggable="true">
+		<activity
+			android:name="com.admob.android.ads.AdMobActivity"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+			android:configChanges="orientation|keyboard|keyboardHidden"/>
+		<activity
+			android:name=".BluetoothChat"
+			android:label="@string/app_name"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.MAIN"/>
+				<category
+					android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="com.google.zxing.client.android.CaptureActivity"
+			android:screenOrientation="landscape"
+			android:configChanges="orientation|keyboardHidden"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+			android:windowSoftInputMode="stateAlwaysHidden">
+		</activity>
+		<activity
+			android:name=".DeviceListActivity"
+			android:icon="@drawable/icon"
+			android:label="@string/select_device"
+			android:theme="@android:style/Theme.Dialog"
+			android:configChanges="orientation|keyboardHidden"/>
+		<activity
+			android:name=".GunActivityDebug"
+			android:screenOrientation="portrait"
+			android:configChanges="orientation|keyboardHidden"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+			<intent-filter>
+				<action
+					android:name="android.intent.action.MAIN"/>
+				<category
+					android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
 
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.example.android.BluetoothChat"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk minSdkVersion="6" />
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+		<!-- Track Market installs from AdMob ads -->
+		<receiver
+			android:name="com.admob.android.ads.analytics.InstallReceiver"
+			android:exported="true">
+			<intent-filter>
+				<action
+					android:name="com.android.vending.INSTALL_REFERRER"/>
+			</intent-filter>
+		</receiver>
 
-    <application android:label="@string/app_name"
-                 android:icon="@drawable/app_icon" android:debuggable="true">
-        <activity android:name=".BluetoothChat"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name="com.google.zxing.client.android.CaptureActivity"                  
-              android:screenOrientation="landscape"
-              android:configChanges="orientation|keyboardHidden"
-              android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-              android:windowSoftInputMode="stateAlwaysHidden">            
-        </activity>
-        <activity android:name=".DeviceListActivity"
-                  android:icon="@drawable/icon"
-                  android:label="@string/select_device"
-                  android:theme="@android:style/Theme.Dialog"
-                  android:configChanges="orientation|keyboardHidden" />
-        <activity android:name=".GunActivityDebug"
-                  android:screenOrientation="landscape"
-                  android:configChanges="orientation|keyboardHidden"
-                    android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+		<!-- The application's publisher ID assigned by AdMob -->
+		<meta-data
+			android:value="a14d618e8439a30"
+			android:name="ADMOB_PUBLISHER_ID"/>
+		<!--
+			use a separate publisher id here to aid in tracking intersitial statistics
+		-->
+		<meta-data
+			android:value="a14d618e8439a30"
+			android:name="ADMOB_INTERSTITIAL_PUBLISHER_ID"/>
+
+	</application>
 </manifest>

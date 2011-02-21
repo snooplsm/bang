@@ -14,5 +14,9 @@
         android:layout_width="fill_parent"
         android:src="@drawable/pistol760x366"
             />
-    <!--com.example.android.BluetoothChat.VerticalLabelView android:layout_width="fill_parent" android:layout_alignParentBottom="true" android:layout_height="wrap_content" app:text="Point your pistol to the ground!"/-->
+    <!--<com.example.android.BluetoothChat.WinLostGameOverlayView
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	/>
+    --><!--com.example.android.BluetoothChat.VerticalLabelView android:layout_width="fill_parent" android:layout_alignParentBottom="true" android:layout_height="wrap_content" app:text="Point your pistol to the ground!"/-->
 </RelativeLayout>
