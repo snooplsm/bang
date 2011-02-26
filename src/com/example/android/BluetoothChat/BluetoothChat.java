@@ -60,14 +60,8 @@ import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +80,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		OnClickListener, View.OnTouchListener, InterstitialAdListener {
 	private static byte BEGIN_GAME = 1;
 	private static final boolean D = true;
-
+ 
 	// Key names received from the BluetoothChatService Handler
 	public static final String DEVICE_NAME = "device_name";
 	private static byte GUN_HOLSTERED = 5;
@@ -98,6 +92,15 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 
 	public static final int MESSAGE_DEVICE_NAME = 4;
 	public static final int MESSAGE_READ = 2;
+	public static final int MESSAGE_DISCONNECTED = 6;
+	
+	/**
+	 * ARE WE ON PISTOL SCREEN?  WHAT SCREEN ARE WE ON?
+	 */
+	
+	private static final int INTERNAL_STATE_HOME_SCREEN = 0;
+	//private static final int INTERNAL_STATE_GAME
+	private int internalState;
 
 	// Message types sent from the BluetoothChatService Handler
 	public static final int MESSAGE_STATE_CHANGE = 1;
@@ -170,12 +173,11 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 	private String mConnectedDeviceName = null;
 
 	// Array adapter for the conversation thread
-	private ArrayAdapter<String> mConversationArrayAdapter;
 
 	// Layout Views
 	// private TextView mTitle;
 	// private View mTopLevelTitle;
-	private ListView mConversationView;
+	// private ListView mConversationView;
 
 	private Map<Byte, DataHandler> mDataHandler = new HashMap<Byte, DataHandler>();
 
@@ -189,9 +191,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 					Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
 				switch (msg.arg1) {
 				case BluetoothChatService.STATE_CONNECTED:
-					// mTitle.setText(R.string.title_connected_to);
-					// mTitle.append(mConnectedDeviceName);
-					mConversationArrayAdapter.clear();
 					break;
 				case BluetoothChatService.STATE_CONNECTING:
 					// mTitle.setText(R.string.title_connecting);
@@ -206,7 +205,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 				byte[] writeBuf = ((byte[][]) msg.obj)[1];
 				// construct a string from the buffer
 				String writeMessage = new String(writeBuf);
-				mConversationArrayAdapter.add("Me:  " + writeMessage);
 				break;
 			case MESSAGE_READ:
 				BangBangMessage bbm = (BangBangMessage) msg.obj;
@@ -244,12 +242,12 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 	private SensorEvent mLastSensorEvent = null;
 
 	private ObjectMapper mObjectMapper = null;
-	private EditText mOutEditText;
+	// private EditText mOutEditText;
 
 	// String buffer for outgoing messages
 	private StringBuffer mOutStringBuffer;
 
-	private Button mSendButton;
+	// private Button mSendButton;
 
 	private Vibrator mVibrator;
 
@@ -291,6 +289,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 
 	private void beginGame(BeginGame game) {
 		Log.i(TAG, "beginGame");
+		clearViews();
 		if (timer != null) {
 			timer.cancel();
 		}
@@ -323,6 +322,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 			pistolContainer = (RelativeLayout) findViewById(R.id.pistol_container);
 		}
 		onPistolScreen = true;
+		clearViews();
 		registerListeners();
 	}
 
@@ -367,20 +367,26 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		return random;
 	}
 
-	private Spinner getSpinner(int id) {
-		return (Spinner) findViewById(id);
-	}
+	// private Spinner getSpinner(int id) {
+	// return (Spinner) findViewById(id);
+	// }
+
+	private long beganShowingWinLostOverlay;
 
 	private View getWinLostGameOverlayView(boolean won) {
 		if (winLostGameOverlay == null) {
 			winLostGameOverlay = new WinLostGameOverlayView(this);
 			winLostGameOverlay.setOnTouchListener(new View.OnTouchListener() {
 				public boolean onTouch(View view, MotionEvent motionEvent) {
-					startGame();
-					return false;
+					if (System.currentTimeMillis() - beganShowingWinLostOverlay > 3000) {
+						startGame();
+					}
+					return true;
 				}
 			});
 		}
+		beganShowingWinLostOverlay = System.currentTimeMillis();
+
 		if (won) {
 			winLostGameOverlay.setWinLossText("You Won!");
 			winLostGameOverlay
@@ -396,37 +402,38 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 
 	private void initializeNewGameMenu() {
 		setContentView(R.layout.new_game);
-		final Spinner chooseSeconds = getSpinner(R.id.choose_seconds);
-		final Spinner chooseAnnounce = getSpinner(R.id.choose_announce);
+		// final Spinner chooseSeconds = getSpinner(R.id.choose_seconds);
+		// final Spinner chooseAnnounce = getSpinner(R.id.choose_announce);
 
-		ArrayAdapter<CharSequence> chooseSecondsAdapter = ArrayAdapter
-				.createFromResource(BluetoothChat.this, R.array.seconds_array,
-						android.R.layout.simple_spinner_item);
-		chooseSecondsAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		chooseSeconds.setAdapter(chooseSecondsAdapter);
-		AdapterView.OnItemSelectedListener selectedListener = new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> adapterView, View view,
-					int i, long l) {
-				PropertyChanged c = new PropertyChanged();
-				c.setId(adapterView.getId());
-				c.setValue(i);
-				c.setTimestamp(System.currentTimeMillis());
-				send(PROPERTY_CHANGED, c);
-			}
-
-			public void onNothingSelected(AdapterView<?> adapterView) {
-
-			}
-		};
-		chooseSeconds.setOnItemSelectedListener(selectedListener);
-		final ArrayAdapter<CharSequence> chooseAnnounceAdapter = ArrayAdapter
-				.createFromResource(BluetoothChat.this, R.array.announce_array,
-						android.R.layout.simple_spinner_item);
-		chooseAnnounceAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		chooseAnnounce.setAdapter(chooseAnnounceAdapter);
-		chooseAnnounce.setOnItemSelectedListener(selectedListener);
+		// ArrayAdapter<CharSequence> chooseSecondsAdapter = ArrayAdapter
+		// .createFromResource(BluetoothChat.this, R.array.seconds_array,
+		// android.R.layout.simple_spinner_item);
+		// chooseSecondsAdapter
+		// .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// //chooseSeconds.setAdapter(chooseSecondsAdapter);
+		// AdapterView.OnItemSelectedListener selectedListener = new
+		// AdapterView.OnItemSelectedListener() {
+		// public void onItemSelected(AdapterView<?> adapterView, View view,
+		// int i, long l) {
+		// PropertyChanged c = new PropertyChanged();
+		// c.setId(adapterView.getId());
+		// c.setValue(i);
+		// c.setTimestamp(System.currentTimeMillis());
+		// send(PROPERTY_CHANGED, c);
+		// }
+		//
+		// public void onNothingSelected(AdapterView<?> adapterView) {
+		//
+		// }
+		// };
+		// chooseSeconds.setOnItemSelectedListener(selectedListener);
+		// final ArrayAdapter<CharSequence> chooseAnnounceAdapter = ArrayAdapter
+		// .createFromResource(BluetoothChat.this, R.array.announce_array,
+		// android.R.layout.simple_spinner_item);
+		// chooseAnnounceAdapter
+		// .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// chooseAnnounce.setAdapter(chooseAnnounceAdapter);
+		// chooseAnnounce.setOnItemSelectedListener(selectedListener);
 
 		View startGame = findViewById(R.id.start_game);
 		startGame.setOnClickListener(this);
@@ -460,7 +467,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 				BluetoothDevice device = mBluetoothAdapter
 						.getRemoteDevice(address);
 				mChatService.connect(device);
-
 			}
 			break;
 		case REQUEST_ENABLE_BT:
@@ -510,12 +516,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
 				R.layout.custom_title);
 
-		// Set up the custom title
-		// mTitle = (TextView) findViewById(R.id.title_left_text);
-		// mTitle.setText(R.string.app_name);
-		// mTitle = (TextView) findViewById(R.id.title_right_text);
-		// mTopLevelTitle = findViewById(R.id.top_level_title);
-		// Get local Bluetooth adapter
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 		// If the adapter is null, then Bluetooth is not supported
@@ -544,6 +544,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		}
 
 		View barcodeConnect = findViewById(R.id.connect_via_barcode);
+
 		barcodeConnect.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -560,6 +561,9 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 			}
 
 		});
+
+		View barcodeText = findViewById(R.id.connect_via_barcode_text);
+
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -568,7 +572,8 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		whistleMusic = MediaPlayer.create(this, R.raw.whistle_song);
 		whistleMusic.setLooping(true);
 
-		AdManager.setTestDevices(new String[] {"49FDCD50FF5E92B922A8EDE86616B3EF"});
+		AdManager
+				.setTestDevices(new String[] { "49FDCD50FF5E92B922A8EDE86616B3EF" });
 		interstitialAd = new InterstitialAd(Event.POST_ROLL, this);
 		interstitialAd.requestAd(this);
 
@@ -824,7 +829,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 
 			// Reset out string buffer to zero and clear the edit text field
 			mOutStringBuffer.setLength(0);
-			mOutEditText.setText(mOutStringBuffer);
 		}
 	}
 
@@ -847,28 +851,13 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		}
 	}
 
-	private void setSpinnerValue(int id, int index) {
-		Log.i(getClass().getSimpleName(), "" + id + "," + index);
-		getSpinner(id).setSelection(index);
-	}
+	// private void setSpinnerValue(int id, int index) {
+	// Log.i(getClass().getSimpleName(), "" + id + "," + index);
+	// getSpinner(id).setSelection(index);
+	// }
 
 	private void setupChat() {
 		Log.d(TAG, "setupChat()");
-
-		// Initialize the array adapter for the conversation thread
-		mConversationArrayAdapter = new ArrayAdapter<String>(this,
-				R.layout.message);
-		mConversationView = (ListView) findViewById(R.id.in);
-		mConversationView.setOnTouchListener(this);
-		mConversationView.setAdapter(mConversationArrayAdapter);
-
-		// Initialize the compose field with a listener for the return key
-		mOutEditText = (EditText) findViewById(R.id.edit_text_out);
-		mOutEditText.setOnEditorActionListener(mWriteListener);
-
-		// Initialize the send button with a listener that for click events
-		mSendButton = (Button) findViewById(R.id.button_send);
-
 		// Initialize the BluetoothChatService to perform bluetooth connections
 		mChatService = new BluetoothChatService(this, mHandler);
 
@@ -945,22 +934,23 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 
 		// mDataHandler.put(GUN_NOT_HOLSTERED, new DataHandler<GunHolstered>)
 
-		mDataHandler.put(PROPERTY_CHANGED, new DataHandler<PropertyChanged>() {
-			public Class<PropertyChanged> getDataClass() {
-				return PropertyChanged.class;
-			}
-
-			public Byte getInstructionByte() {
-				return PROPERTY_CHANGED;
-			}
-
-			public void process(PropertyChanged data) {
-				if (R.id.choose_seconds == data.getId()
-						|| R.id.choose_announce == data.getId()) {
-					setSpinnerValue(data.getId(), (Integer) data.getValue());
-				}
-			}
-		});
+		// mDataHandler.put(PROPERTY_CHANGED, new DataHandler<PropertyChanged>()
+		// {
+		// public Class<PropertyChanged> getDataClass() {
+		// return PropertyChanged.class;
+		// }
+		//
+		// public Byte getInstructionByte() {
+		// return PROPERTY_CHANGED;
+		// }
+		//
+		// public void process(PropertyChanged data) {
+		// if (R.id.choose_seconds == data.getId()
+		// || R.id.choose_announce == data.getId()) {
+		// setSpinnerValue(data.getId(), (Integer) data.getValue());
+		// }
+		// }
+		// });
 
 		mDataHandler.put(BEGIN_GAME, new DataHandler<BeginGame>() {
 			public Class<BeginGame> getDataClass() {
@@ -999,8 +989,8 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		}
 		pistolContainer.addView(getWinLostGameOverlayView(won));
 		showingWinLostGameOverlay = true;
-		if(hasAd) {
-			interstitialAd.show(this);
+		if (hasAd) {
+			// interstitialAd.show(this);
 		}
 	}
 
@@ -1033,5 +1023,10 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		bg.setSecondsUntilDuel(seconds);
 		send(BEGIN_GAME, bg);
 		beginGame(bg);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
 	}
 }

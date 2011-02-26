@@ -129,6 +129,11 @@ public class BluetoothChatService {
         // Start the thread to connect with the given device
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
+        Message msg = mHandler.obtainMessage(BluetoothChat.MESSAGE_TOAST);
+        Bundle bundle = new Bundle();
+        bundle.putString(BluetoothChat.TOAST, "connecting...");
+        msg.setData(bundle);
+        mHandler.sendMessage(msg);
         setState(STATE_CONNECTING);
     }
 
@@ -216,6 +221,8 @@ public class BluetoothChatService {
         bundle.putString(BluetoothChat.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
+        
+        mHandler.sendEmptyMessage(BluetoothChat.MESSAGE_DISCONNECTED);        
     }
 
     /**
