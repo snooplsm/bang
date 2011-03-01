@@ -64,6 +64,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RemoteViews.ActionException;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.InterstitialAd;
@@ -80,7 +81,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		OnClickListener, View.OnTouchListener, InterstitialAdListener {
 	private static byte BEGIN_GAME = 1;
 	private static final boolean D = true;
- 
+
 	// Key names received from the BluetoothChatService Handler
 	public static final String DEVICE_NAME = "device_name";
 	private static byte GUN_HOLSTERED = 5;
@@ -93,13 +94,13 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 	public static final int MESSAGE_DEVICE_NAME = 4;
 	public static final int MESSAGE_READ = 2;
 	public static final int MESSAGE_DISCONNECTED = 6;
-	
+
 	/**
-	 * ARE WE ON PISTOL SCREEN?  WHAT SCREEN ARE WE ON?
+	 * ARE WE ON PISTOL SCREEN? WHAT SCREEN ARE WE ON?
 	 */
-	
+
 	private static final int INTERNAL_STATE_HOME_SCREEN = 0;
-	//private static final int INTERNAL_STATE_GAME
+	// private static final int INTERNAL_STATE_GAME
 	private int internalState;
 
 	// Message types sent from the BluetoothChatService Handler
@@ -473,6 +474,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 			// When the request to enable Bluetooth returns
 			if (resultCode == Activity.RESULT_OK) {
 				// Bluetooth is now enabled, so set up a chat session
+				drawQRCode();
 				setupChat();
 			} else {
 				// User did not enable Bluetooth or an error occured
@@ -502,6 +504,28 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		isClient = false;
 		startGame();
 	}
+	
+	private void drawQRCode() {
+		if (mBluetoothAdapter.isEnabled()) {
+
+			String address = mBluetoothAdapter.getAddress();
+			Bitmap bitmap;
+			try {
+				DisplayMetrics m = getResources().getDisplayMetrics();
+				int square = m.heightPixels / 3;
+				addressQRCode = (ImageView) findViewById(R.id.address_qr_code);
+				bitmap = QRCodeEncoder.encodeAsBitmap(address,
+						BarcodeFormat.QR_CODE, square, square);
+				LayoutParams frame = addressQRCode.getLayoutParams();
+				frame.width = square;
+				frame.height = square;
+				addressQRCode.setLayoutParams(frame);
+				addressQRCode.setImageBitmap(bitmap);
+			} catch (WriterException we) {
+				Log.w(TAG, we);
+			}
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -525,24 +549,12 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 			finish();
 			return;
 		}
-
-		String address = mBluetoothAdapter.getAddress();
-		Bitmap bitmap;
-		try {
-			DisplayMetrics m = getResources().getDisplayMetrics();
-			int square = m.heightPixels / 3;
-			addressQRCode = (ImageView) findViewById(R.id.address_qr_code);
-			bitmap = QRCodeEncoder.encodeAsBitmap(address,
-					BarcodeFormat.QR_CODE, square, square);
-			LayoutParams frame = addressQRCode.getLayoutParams();
-			frame.width = square;
-			frame.height = square;
-			addressQRCode.setLayoutParams(frame);
-			addressQRCode.setImageBitmap(bitmap);
-		} catch (WriterException we) {
-			Log.w(TAG, we);
+		if(mBluetoothAdapter.isEnabled()) {
+			drawQRCode();
+		} else {
+			Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(intent,REQUEST_ENABLE_BT);
 		}
-
 		View barcodeConnect = findViewById(R.id.connect_via_barcode);
 
 		barcodeConnect.setOnClickListener(new OnClickListener() {
@@ -1024,7 +1036,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		send(BEGIN_GAME, bg);
 		beginGame(bg);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
