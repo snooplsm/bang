@@ -137,36 +137,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>com.gent.mp</groupId>
-				<artifactId>mp-maven-plugin</artifactId>
-				<version>1.0-SNAPSHOT</version>
-				<configuration>
-					<androidManifestTarget>${androidManifestTarget}</androidManifestTarget>
-					<admobPublisherId>${admobPublisherId}</admobPublisherId>
-					<packageName>${packageName}</packageName>
-				</configuration><!--
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>touch</goal>
-						</goals>
-					</execution>
-				</executions>
-			-->
-			</plugin>
-			<plugin>
-				<groupId>com.gent.mp</groupId>
-				<artifactId>schedule-maker-maven-plugin</artifactId>
-				<version>1.0-SNAPSHOT</version>
-				<configuration>
-					<gtfsFile>${gtfsFile}</gtfsFile>
-					<partitionsTarget>assets/database</partitionsTarget>
-					<workDir>${project.build.directory}/workDir</workDir>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3</version>
@@ -179,7 +149,7 @@
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>maven-android-plugin</artifactId>
-				<version>2.6.1-SNAPSHOT</version>
+				<version>2.8.4</version>
 				<configuration>
 					<sdk>
 						<platform>${android.platform}</platform>
