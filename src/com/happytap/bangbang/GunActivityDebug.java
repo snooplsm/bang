@@ -1,8 +1,7 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.widget.RelativeLayout;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +16,7 @@ public class GunActivityDebug extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pistol);
 
-        RelativeLayout l = (RelativeLayout) findViewById(R.id.pistol_container);
+      //  RelativeLayout l = (RelativeLayout) findViewById(R.id.pistol_container);
 
         //HolsterWeaponOverlayView v = new HolsterWeaponOverlayView(this);
 //        WinLostGameOverlayView v = new WinLostGameOverlayView(this);

@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import android.content.Context;
 import android.graphics.*;
@@ -13,6 +13,8 @@ import android.view.View;
  * Time: 7:06 PM
  */
 public class HolsterWeaponOverlayView extends View {
+	
+	private static final long serialVersionUID = 1L;
 
     public HolsterWeaponOverlayView(Context context) {
         super(context);        
@@ -43,8 +45,8 @@ public class HolsterWeaponOverlayView extends View {
         paint.setColor(Color.argb(200,200,200,200));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(0, 0, getRight(), getBottom(), paint);
-        Paint.FontMetrics fm = paint.getFontMetrics();
-        Typeface tf = paint.getTypeface();
+        //Paint.FontMetrics fm = paint.getFontMetrics();
+        //Typeface tf = paint.getTypeface();
         paint.setColor(Color.parseColor("#663300"));
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);

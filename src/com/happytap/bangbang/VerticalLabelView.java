@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import android.content.Context;
 import android.content.res.TypedArray;

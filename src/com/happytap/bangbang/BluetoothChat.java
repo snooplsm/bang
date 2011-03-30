@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.smile.SmileFactory;
@@ -55,8 +53,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
@@ -64,7 +60,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RemoteViews.ActionException;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.InterstitialAd;
@@ -88,8 +83,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 	private static byte GUN_NOT_HOLSTERED = 4;
 	private static byte GUN_NOT_HOLSTERED_ON_BEGIN_DUEL = 6;
 	private static byte HIT = 3;
-	private static Pattern MAC_ADDRESS_PATTERN = Pattern.compile(
-			"^([0-9a-f]{2}([:-]|$)){6}$", Pattern.CASE_INSENSITIVE);
 
 	public static final int MESSAGE_DEVICE_NAME = 4;
 	public static final int MESSAGE_READ = 2;
@@ -464,7 +457,6 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 				// Get the device MAC address
 				String address = data.getExtras().getString(
 						DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-
 				BluetoothDevice device = mBluetoothAdapter
 						.getRemoteDevice(address);
 				mChatService.connect(device);
@@ -487,14 +479,13 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		case REQUEST_ADDRESS:
 			if (resultCode == Activity.RESULT_OK) {
 				String address = data.getStringExtra("SCAN_RESULT");
-				String format = data.getStringExtra("SCAN_RESULT_FORMAT");
-				Matcher matcher = MAC_ADDRESS_PATTERN.matcher(address);
-				if (matcher.matches()) {
+//				String format = data.getStringExtra("SCAN_RESULT_FORMAT");
+				if (BluetoothAdapter.checkBluetoothAddress(address)) {
 					BluetoothDevice device = mBluetoothAdapter
 							.getRemoteDevice(address);
+					getWindow().makeActive();
 					mChatService.connect(device);
 				}
-				System.out.println(address);
 			}
 		}
 
@@ -533,12 +524,12 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		if (D)
 			Log.e(TAG, "+++ ON CREATE +++");
 
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.main);
-		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-				R.layout.custom_title);
+//		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
+//				R.layout.custom_title);
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -552,7 +543,7 @@ public class BluetoothChat extends Activity implements SensorEventListener,
 		if(mBluetoothAdapter.isEnabled()) {
 			drawQRCode();
 		} else {
-			Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);			
 			startActivityForResult(intent,REQUEST_ENABLE_BT);
 		}
 		View barcodeConnect = findViewById(R.id.connect_via_barcode);

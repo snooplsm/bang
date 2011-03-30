@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 /**
  * Created by IntelliJ IDEA.

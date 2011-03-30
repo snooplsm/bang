@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.BluetoothChat.view;
+package com.happytap.bangbang.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,7 +25,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.android.BluetoothChat.R;
+import com.happytap.bangbang.R;
 
 
 public class VerticalLabelView extends View {

@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -12,6 +12,8 @@ import java.io.Serializable;
  */
 public class ShotHit implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     @JsonProperty("w")
     private int whatever = (int)Math.random();
 

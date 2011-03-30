@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -12,7 +12,9 @@ import java.io.Serializable;
  */
 public class BeginGame implements Serializable {
 
-    @JsonProperty("sudi")
+	private static final long serialVersionUID = 1L;
+
+	@JsonProperty("sudi")
     private int secondsUntilDuelIndex;
 
     @JsonProperty("ad")

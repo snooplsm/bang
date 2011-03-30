@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import java.io.Serializable;
 
@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 public class ShotFired implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     private float x;
     private float y;
     private float z;

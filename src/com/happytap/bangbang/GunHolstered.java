@@ -1,4 +1,4 @@
-package com.example.android.BluetoothChat;
+package com.happytap.bangbang;
 
 import java.io.Serializable;
 
@@ -9,4 +9,7 @@ import java.io.Serializable;
  * Time: 2:35 AM
  */
 public class GunHolstered implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 }
