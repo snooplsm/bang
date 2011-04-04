@@ -28,16 +28,26 @@
 	<application
 		android:label="@string/app_name"
 		android:icon="@drawable/app_icon"
+		android:name=".BangBangApplication"
 		android:debuggable="true">
 		<activity
 			android:name="com.admob.android.ads.AdMobActivity"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 			android:configChanges="orientation|keyboard|keyboardHidden"/>
+		
 		<activity
-			android:name=".BluetoothChat"
+			android:name=".GameActivity"
 			android:label="@string/app_name"
 			android:configChanges="orientation|keyboardHidden"
 			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+			>
+		</activity>
+		<activity
+			android:name=".ConnectActivity"
+			android:label="@string/app_name"
+			android:configChanges="orientation|keyboardHidden"
+			android:screenOrientation="portrait"			
 			>
 			<intent-filter>
 				<action
