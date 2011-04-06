@@ -16,11 +16,19 @@
 
 package com.happytap.bangbang;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -202,12 +210,20 @@ public class ConnectActivity extends BangBangActivity implements
 
 		barcodeConnect.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View v) {
+			public void onClick(View v) {				
 				Intent intent = new Intent(
 						"com.google.zxing.client.android.SCAN");
 				intent.setPackage("com.google.zxing.client.android");
 				intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-				startActivityForResult(intent, REQUEST_ADDRESS);
+				final PackageManager packageManager = getPackageManager();
+			    List<ResolveInfo> list =
+			            packageManager.queryIntentActivities(intent,
+			                    PackageManager.MATCH_DEFAULT_ONLY);
+			    if(list!=null && list.size()>0) {
+			    	startActivityForResult(intent, REQUEST_ADDRESS);
+			    } else {
+			    	showDialog(DIALOG_NEED_ZXING);			    	
+			    }
 			}
 
 		});
@@ -220,6 +236,33 @@ public class ConnectActivity extends BangBangActivity implements
 		interstitialAd.requestAd(this);
 
 	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch(id) {
+		case DIALOG_NEED_ZXING:
+			AlertDialog.Builder b = new AlertDialog.Builder(this);
+			b.setCancelable(true);
+			b.setIcon(R.drawable.launcher_icon);
+			b.setTitle("Barcode Scanner");
+			b.setMessage("You need the ZXing Barcode Scanner for this feature");
+			b.setPositiveButton("Install", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					Intent intent = new Intent(Intent.ACTION_VIEW);
+					intent.setData(Uri.parse("market://search?q=pname:com.google.zxing.client.android"));
+					startActivity(intent);
+				}
+				
+			});
+			return b.create();
+		}
+		return super.onCreateDialog(id);
+	}
+
+
+
+	private static final int DIALOG_NEED_ZXING = 1;
 
 	public void onFailedToReceiveInterstitial(InterstitialAd ad) {
 

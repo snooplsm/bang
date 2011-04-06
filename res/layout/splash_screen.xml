@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@color/white">
+  
+  <ImageView android:padding="10dp" android:layout_gravity="top|left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/bang"/>
+  <ImageView android:padding="10dp" android:layout_alignParentBottom="true" android:layout_alignParentRight="true" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/bang"/>
+  <TextView android:id="@+id/find_opponent" android:gravity="center_horizontal" android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="50dp" android:textStyle="bold" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="FIND OPPONENT"/>
+  <TextView android:id="@+id/about" android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="15dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:gravity="left" android:paddingBottom="20dp" android:paddingLeft="20dp"  android:text="ABOUT"/>
+  <TextView android:id="@+id/tutorial" android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="15dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:gravity="right" android:paddingTop="20dp" android:paddingRight="20dp" android:text="TUTORIAL"/>
+</RelativeLayout>

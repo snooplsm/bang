@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:background="@color/white"
+  android:paddingLeft="5dp"
+  android:scrollbars="vertical">
+  
+  <TextView android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="40dp" android:layout_gravity="center_horizontal" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="20dp" android:paddingRight="20dp" android:text="About"/>
+  
+  <TextView android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="13dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="20dp" android:text="Publisher: Happy Tap"/>
+  <TextView android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="13dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="20dp" android:text="Developer: Ryan Gravener"/>
+  <TextView android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="13dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="20dp" android:text="Music: Arend van Stenis - Lone Cowboy"/>
+  <TextView android:textColor="@color/black" android:textColorHighlight="@color/red" android:textSize="13dp" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:paddingTop="20dp" android:text="Graphics: 'Bang' openclipart.org / cybergedeon"/>
+  
+
+</LinearLayout>

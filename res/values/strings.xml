@@ -15,7 +15,7 @@
 -->
 
 <resources>
-    <string name="app_name">bang bang</string>
+    <string name="app_name">Bang Bang</string>
 
     <!--  BluetoothChat -->
     <string name="not_connected">You are not connected to a device</string>
